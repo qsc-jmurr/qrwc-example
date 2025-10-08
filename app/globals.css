@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1c1c1c;
+
+  --blue: #0166ff;
+  --red: #ee0153;
+  --green: #26db18;
+  --cyan: rgb(27, 212, 219);
+  --magenta: #e816b0;
+  --yellow: #f3c623;
+
+  --black: #1c1c1c;
+  --white: #ffffff;
+  --grey: #f4f2f2;
+
+  --bold-blue: linear-gradient(90deg, #0166ff, #00d4ff);
+  --electric-red: linear-gradient(90deg, #ee0153, #e816b0);
+  --expert-green: linear-gradient(90deg, #26db18, #00d4ff);
+
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@font-face {
+  font-family: "Sohne-Fett";
+  src: url("../public/fonts/Sohne-Fett.otf");
+}
+
+@font-face {
+  font-family: "Sohne-Kraftig";
+  src: url("../public/fonts/Sohne-Kraftig.otf");
+}
+
+@font-face {
+  font-family: "SohneMono-Buch";
+  src: url("../public/fonts/SohneMono-Buch.otf");
+}
+@font-face {
+  font-family: "SohneBreit-Kraftig";
+  src: url("../public/fonts/SohneBreit-Kraftig.otf");
+}
+
+
+@font-face {
+  font-family: "Sohne-Leicht";
+  src: url("../public/fonts/Sohne-Leicht.otf");
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "SohneBreit-Kraftig";
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  font-family: "SohneMono-Buch";
+  margin: 0;
+}
