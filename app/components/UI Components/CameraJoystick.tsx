@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 interface CameraJoystickProps {
-    activeCamera: number | null;
     onMove?: (x: number, y: number) => void; 
     onZoomPress?: (direction: 'in' | 'out') => void;
     onZoomRelease?: (direction: 'in' | 'out') => void;
@@ -11,9 +10,7 @@ interface CameraJoystickProps {
 }
 
 export default function CameraJoystick({ 
-    activeCamera, 
     onMove, 
-    onZoomPress, 
     onZoomRelease, 
     disabled = false 
 }: CameraJoystickProps) {
@@ -44,7 +41,6 @@ export default function CameraJoystick({
         if (!container) return;
 
         const handlePointerDown = (e: PointerEvent) => {
-            if (activeCamera === null || disabled) return; 
             isDraggingRef.current = true;
             container.setPointerCapture(e.pointerId);
             updatePositionFromEvent(e);
@@ -90,7 +86,7 @@ export default function CameraJoystick({
             window.removeEventListener('blur', handleBlur);
             resetJoystick();
         };
-    }, [activeCamera, resetJoystick, scheduleMove, disabled]);
+    }, [resetJoystick, scheduleMove, disabled]);
 
     const clampToCircle = (x: number, y: number, r: number) => {
         const mag = Math.hypot(x, y);
@@ -115,31 +111,21 @@ export default function CameraJoystick({
         requestAnimationFrame(step);
     };
 
-    const handleZoomPress = (direction: 'in' | 'out') => {
-        if (activeCamera === null || disabled) return;
-        onZoomPress?.(direction);
-    };
-
-    const handleZoomRelease = (direction: 'in' | 'out') => {
-        if (activeCamera === null || disabled) return;
-        onZoomRelease?.(direction);
-    };
-
     return (
         <div className="flex justify-center gap-6 md:flex-col md:items-center">
             <div className="flex flex-col items-center gap-2">
                 <label className="text-[10px] uppercase tracking-wide text-neutral-400">Pan / Tilt</label>
                 <div
-                    ref={joystickContainerRef}
-                    id="camera-joystick-container"
-                    className={`relative w-44 h-44 rounded-full border border-neutral-600/70 bg-neutral-800/70 overflow-hidden select-none ${(activeCamera === null || disabled) ? 'opacity-40 grayscale' : ''}`}
-                    aria-label="Camera PTZ Joystick"
-                    role="application"
+                ref={joystickContainerRef}
+                id="camera-joystick-container"
+                className={`relative w-44 h-44 rounded-full border border-neutral-600/70 bg-neutral-800/70 overflow-hidden select-none`}
+                aria-label="Camera PTZ Joystick"
+                role="application"
                 >
                     <div
-                        ref={knobRef}
-                        className="absolute content-center top-1/2 left-1/2 w-16 h-16 -translate-x-1/20 -translate-y-1/20 rounded-full bg-gradient-to-br from-red-400 to-red-600 shadow-lg shadow-red-900/30 ring-1 ring-red-300/30 flex items-center justify-center"
-                        style={{ transform: `translate(calc(-50% + ${joystickPos.x}px), calc(-50% + ${joystickPos.y}px))` }}
+                    ref={knobRef}
+                    className="absolute content-center top-1/2 left-1/2 w-16 h-16 -translate-x-1/20 -translate-y-1/20 rounded-full bg-gradient-to-br from-red-400 to-red-600 shadow-lg shadow-red-900/30 ring-1 ring-red-300/30 flex items-center justify-center"
+                    style={{ transform: `translate(calc(-50% + ${joystickPos.x}px), calc(-50% + ${joystickPos.y}px))` }}
                     />
                 </div>
             </div>

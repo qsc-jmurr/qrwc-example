@@ -19,17 +19,16 @@ const routeConfig = {
 };
 
 export default function ConditionalLayout({ children }: ConditionalLayoutProps) {
+  //  only show the navbar and footer on certain routes
   const pathname = usePathname();
   const config = routeConfig[pathname as keyof typeof routeConfig] || routeConfig.default;
 
   return (
     <div className="min-h-screen flex flex-col">
       {config.showNav && <Navbar />}
-      
       <main className="flex-1 w-full">
         {children}
       </main>
-      
       {config.showFooter && <Footer />}
     </div>
   );

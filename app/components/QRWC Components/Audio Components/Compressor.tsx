@@ -1,20 +1,13 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import {
-    Chart as ChartJS,
-    LineElement,
-    PointElement,
-    LinearScale,
-    CategoryScale,
-    Filler,
-    Tooltip,
-    Legend
-} from 'chart.js';
+import { useQrwc } from "../../../lib/QrwcProvider";
+import { Chart as ChartJS, LineElement, PointElement, LinearScale, CategoryScale, Filler, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import Fader from "../../UI Components/Fader";
+
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Filler, Tooltip, Legend);
-import { useQrwc } from "../../lib/QrwcProvider";
-import Fader from "../UI Components/Fader";
+
 
 export default function Compressor() {
     const { qrwcInstance } = useQrwc();

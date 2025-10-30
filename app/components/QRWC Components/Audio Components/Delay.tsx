@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-import { useQrwc } from "../../lib/QrwcProvider";
-import { Fader } from "../UI Components/Fader";
+import { useQrwc } from "../../../lib/QrwcProvider";
+import { Fader } from "../../UI Components/Fader";
 
 export default function Delay() {
     const { qrwcInstance } = useQrwc();
@@ -35,14 +34,14 @@ export default function Delay() {
             <h2 className="text-sm font-medium tracking-wide text-white/80">Delay</h2>
             <div className="flex flex-col gap-4">
                 <Fader
-                    label="Time"
-                    orientation="horizontal"
-                    min={0}
-                    max={0.5}
-                    step={0.01}
-                    value={delayTime}
-                    onChange={(v)=> handleDelayChange(v)}
-                    formatValue={(v)=> `${(v*1000).toFixed(0)}ms`}
+                label="Time"
+                orientation="horizontal"
+                min={0}
+                max={0.5}
+                step={0.01}
+                value={delayTime}
+                onChange={(v)=> handleDelayChange(v)}
+                formatValue={(v)=> `${(v*1000).toFixed(0)}ms`}
                 />
             </div>
         </section>

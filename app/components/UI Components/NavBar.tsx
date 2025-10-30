@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function NavBar() {
   const pathname = usePathname();
-  if (pathname === '/') return null; // hide on home
+  if (pathname === '/') return null;
 
   const linkBase = 'relative inline-flex items-center justify-center rounded-md px-3 py-2 text-[11px] font-semibold uppercase tracking-wide transition-colors';
   const inactive = 'text-neutral-300/80 hover:text-white hover:bg-white/5';

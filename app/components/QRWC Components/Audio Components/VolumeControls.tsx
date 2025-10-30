@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useQrwc } from "../../lib/QrwcProvider";
+import { useQrwc } from "../../../lib/QrwcProvider";
 
 export default function VolumeControls() {
     const { qrwcInstance } = useQrwc();
