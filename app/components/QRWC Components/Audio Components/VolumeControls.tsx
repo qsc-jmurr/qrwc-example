@@ -68,7 +68,6 @@ export default function VolumeControls() {
                         >
                           {isMuted ? 'Unmute' : 'Mute'}
                         </button>
-
                     </div>
                     <div className="flex-1 flex flex-col gap-2">
                       <div className="flex items-center justify-between text-[0.5rem] tracking-wide text-white/40">

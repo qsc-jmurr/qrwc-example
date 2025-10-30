@@ -8,9 +8,9 @@ import CameraSelect from "../components/QRWC Components/Camera Components/Camera
 export default function Camera() {
     return (
         <div className="max-w-7xl mx-auto px-6 py-10 space-y-8">
-            <header className="mb-8 space-y-2">
-                <h1 className="text-2xl font-semibold tracking-tight">Camera Control</h1>
-                <p className="text-sm text-neutral-400">Example of camera controls with joystick</p>
+            <header className="mb-10">
+                <h1 className="text-3xl font-semibold tracking-tight">Camera Control</h1>
+                <p className="mt-2 text-sm text-white/50">QRWC Interface for Q-SYS Cameras</p>
             </header>
             <div className="grid gap-6 md:grid-cols-3">
                 <Preview />

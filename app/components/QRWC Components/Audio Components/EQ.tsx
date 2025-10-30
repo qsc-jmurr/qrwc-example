@@ -21,8 +21,6 @@ export default function EQ() {
         bandwidth: 1
     })));
 
-    const [initialized, setInitialized] = useState(false);
-
     const eqGraph = useMemo(() => {
         const minF = 10, maxF = 20000;
         const points = 256;
@@ -87,17 +85,13 @@ export default function EQ() {
     useEffect(() => {
         const eqControls = qrwcInstance?.components?.testEQ;
         if (!eqControls) return;
-
-        // Initialize current state from Q-SYS before setting up listeners
-        const initializeFromQSys = () => {
+        const setUpEQ = () => {
             const keys = Object.keys(eqControls.controls || {});
             const freqMatches = keys.map(k => k.match(/^frequency\.(\d+)$/)).filter(Boolean) as RegExpMatchArray[];
             
             if (freqMatches.length) {
                 const maxBand = Math.max(...freqMatches.map(m => parseInt(m[1],10)));
-                setEqBandCount(maxBand);
-                
-                // Read current values from Q-SYS controls
+                setEqBandCount(maxBand);           
                 const currentBands = Array.from({ length: maxBand }, (_, i) => {
                     const bandNum = i + 1;
                     const freqControl = eqControls.controls[`frequency.${bandNum}`];
@@ -115,19 +109,15 @@ export default function EQ() {
                 setEqBands(currentBands);
             }
             
-            // Read current bypass state
             const bypassControl = eqControls.controls.bypass;
             if (bypassControl?.state?.Bool !== undefined) {
                 setEqBypass(bypassControl.state.Bool);
             }
             
-            setInitialized(true);
         };
 
-        // Initialize current state
-        initializeFromQSys();
+        setUpEQ();
 
-        // Set up listeners for future updates
         eqControls?.on("update", (control, state) => {
             const controlId = (control as any)?.id ?? (control as any)?.name;
             if (controlId === "bypass") {
@@ -139,7 +129,7 @@ export default function EQ() {
                 if (match) {
                     const [, parameter, bandNumberStr] = match;
                     const bandNumber = parseInt(bandNumberStr);
-                    const bandIndex = bandNumber - 1; // Convert to 0-based index
+                    const bandIndex = bandNumber - 1;
                     
                     setEqBands(prev => prev.map((band, index) => 
                         index === bandIndex 
@@ -189,21 +179,6 @@ export default function EQ() {
         }
     };
 
-    // Don't render until we've initialized from Q-SYS
-    if (!initialized) {
-        return (
-            <section className="bg-neutral-900/60 backdrop-blur rounded-xl border border-white/5 p-5 flex flex-col gap-5">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-medium tracking-wide text-white/80">Equaliser</h2>
-                    <div className="text-[10px] uppercase tracking-wider text-white/40">Loading...</div>
-                </div>
-                <div className="h-40 flex items-center justify-center">
-                    <div className="text-white/40 text-sm">Syncing with Q-SYS...</div>
-                </div>
-            </section>
-        );
-    }
-
     return(
         <section className="bg-neutral-900/60 backdrop-blur rounded-xl border border-white/5 p-5 flex flex-col gap-5">
             <div className="flex items-center justify-between">
@@ -230,34 +205,34 @@ export default function EQ() {
                             <span className="text-[10px] font-medium text-white/60 uppercase tracking-wide">Band {index+1}</span>
                             <div className="flex items-end gap-4">
                                 <Fader
-                                    label="Freq"
-                                    color="green"
-                                    scale="log"
-                                    min={10}
-                                    max={20000}
-                                    value={band.frequency}
-                                    onChange={(v)=> handleEqChange(index,'frequency', v)}
-                                    formatValue={(v)=> v < 1000 ? `${Math.round(v)}Hz` : `${(v/1000).toFixed(1)}k`}
+                                label="Freq"
+                                color="green"
+                                scale="log"
+                                min={10}
+                                max={20000}
+                                value={band.frequency}
+                                onChange={(v)=> handleEqChange(index,'frequency', v)}
+                                formatValue={(v)=> v < 1000 ? `${Math.round(v)}Hz` : `${(v/1000).toFixed(1)}k`}
                                 />
                                 <Fader
-                                    label="Gain"
-                                    color="blue"
-                                    min={-30}
-                                    max={30}
-                                    step={0.5}
-                                    value={band.gain}
-                                    onChange={(v)=> handleEqChange(index,'gain', v)}
-                                    formatValue={(v)=> `${v.toFixed(1)}dB`}
+                                label="Gain"
+                                color="blue"
+                                min={-30}
+                                max={30}
+                                step={0.5}
+                                value={band.gain}
+                                onChange={(v)=> handleEqChange(index,'gain', v)}
+                                formatValue={(v)=> `${v.toFixed(1)}dB`}
                                 />
                                 <Fader
-                                    label="BW"
-                                    color="yellow"
-                                    min={0.1}
-                                    max={4}
-                                    step={0.05}
-                                    value={band.bandwidth}
-                                    onChange={(v)=> handleEqChange(index,'bandwidth', v)}
-                                    formatValue={(v)=> `${v.toFixed(2)}`}
+                                label="BW"
+                                color="yellow"
+                                min={0.1}
+                                max={4}
+                                step={0.05}
+                                value={band.bandwidth}
+                                onChange={(v)=> handleEqChange(index,'bandwidth', v)}
+                                formatValue={(v)=> `${v.toFixed(2)}`}
                                 />
                             </div>
                             <span className="text-[9px] text-white/40">Q≈{Q.toFixed(2)}</span>
