@@ -4,10 +4,11 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useQrwc } from "../lib/QrwcProvider";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import VolumeControls from "../components/QRWC Components/VolumeControls";
 
-// Mapping Q-SYS control value -> source id. Example: control values 4..6 => source ids 1..3
-const CONTROL_OFFSET = 3; // controlValue = sourceId + CONTROL_OFFSET
-const DEFAULT_CONTROL_VALUE = 1; // reset value
+
+const CONTROL_OFFSET = 3; // Automating the offset from the initial 3 reserved for graphics in Q-SYS
+const DEFAULT_CONTROL_VALUE = 1; // Fallback index for when no sources connected
 
 interface SourceDef { id: number; label: string; }
 interface DisplayState { id: number; sourceId: number | null; }
@@ -25,15 +26,27 @@ export default function Video() {
   ]), []);
 
   // Determine how many outputs exist (assume up to 2; check for control presence)
-  const hasSecond = !!qrwcInstance?.components?.videoDecoder?.controls?.['hdmi.out.2.select.index'];
+  const hasSecond = !!qrwcInstance?.components?.decoder?.controls?.['hdmi.out.2.select.index'];
   const displayCount = hasSecond ? 2 : 1;
 
   const [displays, setDisplays] = useState<DisplayState[]>(() => Array.from({ length: displayCount }, (_, i) => ({ id: i + 1, sourceId: null })));
 
+  // Update displays array when displayCount changes
+  useEffect(() => {
+    setDisplays(prev => {
+      const newDisplays = Array.from({ length: displayCount }, (_, i) => ({ id: i + 1, sourceId: null }));
+      // Preserve existing assignments if display exists
+      return newDisplays.map(newDisplay => {
+        const existing = prev.find(p => p.id === newDisplay.id);
+        return existing || newDisplay;
+      });
+    });
+  }, [displayCount]);
+
   // Listen to decoder output select indices and sync local display assignments
   useEffect(() => {
     if (!qrwcInstance) return;
-    const decoder = qrwcInstance.components.videoDecoder;
+    const decoder = qrwcInstance.components?.decoder;
     if (!decoder) return;
 
     const listeners: Array<() => void> = [];
@@ -78,7 +91,7 @@ export default function Video() {
   // Helpers to push selection to core
   const setDisplaySource = useCallback(async (displayId: number, sourceId: number | null) => {
     if (!qrwcInstance) return;
-    const decoder = qrwcInstance.components.videoDecoder;
+    const decoder = qrwcInstance.components.decoder;
     const key = `hdmi.out.${displayId}.select.index`;
     const ctrl: any = decoder?.controls?.[key];
     if (!ctrl) return;
@@ -157,7 +170,7 @@ export default function Video() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-6 py-10 space-y-8">
       <header className="mb-10">
         <h1 className="text-3xl font-semibold tracking-tight">Video Routing</h1>
         <p className="mt-2 text-sm text-white/50">Drag and drop video routing demo</p>
@@ -183,6 +196,9 @@ export default function Video() {
           </div>
         </section>
       </DndProvider>
+      
+      {/* Volume Controls at bottom of page content */}
+      <VolumeControls />
     </div>
   );
 }

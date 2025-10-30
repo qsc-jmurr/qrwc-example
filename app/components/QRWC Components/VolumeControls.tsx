@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useQrwc } from "../lib/QrwcProvider";
+import { useQrwc } from "../../lib/QrwcProvider";
 
 export default function VolumeControls() {
     const { qrwcInstance } = useQrwc();
@@ -11,8 +11,8 @@ export default function VolumeControls() {
     const [updating, setUpdating] = useState(false);
     
     useEffect(() => {
-        const gainControl = qrwcInstance?.components.Gain.controls.gain;
-        const muteControl = qrwcInstance?.components.Gain.controls.mute;
+        const gainControl = qrwcInstance?.components.Gain?.controls.gain;
+        const muteControl = qrwcInstance?.components.Gain?.controls.mute;
 
         gainControl?.on("update", ({ Value, Position, String, Bool }) => {
         console.log("Gain Control Updated:", { Value, Position, String, Bool });
@@ -57,9 +57,9 @@ export default function VolumeControls() {
     };
 
     return (
-        <div className="fixed inset-x-0 z-40">
-            <div className="mx-auto max-w-7xl px-4 pb-4">
-                <div className="relative rounded-2xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl px-6 py-4 flex items-center gap-8 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]">
+        <div className="w-full">
+            <div className="mx-auto max-w-7xl">
+                <div className="rounded-2xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl px-6 py-4 flex items-center gap-8 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]">
                     <div className="flex flex-col gap-2 min-w-[5.5rem]">
                         <button
                           onClick={handleToggleMute}

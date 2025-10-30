@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useQrwc } from "../lib/QrwcProvider";
+import { useQrwc } from "../../lib/QrwcProvider";
 import { useMemo } from "react";
 
 export default function Footer() {

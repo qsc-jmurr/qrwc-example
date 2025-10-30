@@ -2,21 +2,20 @@
 
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
-import Navbar from './NavBar';
-import Footer from './Footer';
-import VolumeControls from './VolumeControls';
+import Navbar from './UI Components/NavBar';
+import Footer from './UI Components/Footer';
 
 interface ConditionalLayoutProps {
   children: ReactNode;
 }
 
 const routeConfig = {
-  '/': { showNav: false, showFooter: true, showVolume: false } ,
-  '/audio': { showNav: true, showFooter: true, showVolume: true },
-  '/video': { showNav: true, showFooter: true, showVolume: true },
-  '/camera': { showNav: true, showFooter: true, showVolume: true },
+  '/': { showNav: false, showFooter: true },
+  '/audio': { showNav: true, showFooter: true },
+  '/video': { showNav: true, showFooter: true },
+  '/camera': { showNav: true, showFooter: true },
 
-  default: { showNav: true, showFooter: true, showVolume: true }
+  default: { showNav: true, showFooter: true }
 };
 
 export default function ConditionalLayout({ children }: ConditionalLayoutProps) {
@@ -27,16 +26,11 @@ export default function ConditionalLayout({ children }: ConditionalLayoutProps) 
     <div className="min-h-screen flex flex-col">
       {config.showNav && <Navbar />}
       
-      <div className="flex-1 w-full">
-        <main className={config.showNav ? 'with-navigation' : 'full-page'}>
-          {children}
-        </main>
-        {config.showVolume && <VolumeControls />}
-      </div>
+      <main className="flex-1 w-full">
+        {children}
+      </main>
       
       {config.showFooter && <Footer />}
-
-
     </div>
   );
 }
