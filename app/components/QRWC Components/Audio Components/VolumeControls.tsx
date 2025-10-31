@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useQrwc } from "../../../lib/QrwcProvider";
+import Fader from "../../UI Components/Fader";
 
 export default function VolumeControls() {
     const { qrwcInstance } = useQrwc();
@@ -59,7 +60,7 @@ export default function VolumeControls() {
     return (
         <div className="w-full">
             <div className="mx-auto max-w-7xl">
-                <div className="rounded-2xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl px-6 py-4 flex items-center gap-8 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]">
+                <div className="flex rounded-2xl items-center border border-white/10 bg-neutral-900/80 backdrop-blur-xl px-6 py-4 flex items-center gap-8 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]">
                     <div className="flex flex-col gap-2 min-w-[5.5rem]">
                         <button
                           onClick={handleToggleMute}
@@ -72,14 +73,15 @@ export default function VolumeControls() {
                     <div className="flex-1 flex flex-col gap-2">
                       <div className="flex items-center justify-between text-[0.5rem] tracking-wide text-white/40">
                       </div>
-                      <input
-                        type="range"
+                      <Fader 
+                        orientation = "horizontal"
+                        scale = "linear"
+                        color = "blue"
                         min={-100}
                         max={20}
-                        step={0.5}
                         value={gain}
-                        onChange={(e)=> handleGainChange(Number(e.target.value))}
-                        className="w-full accent-sky-400 h-2 cursor-pointer [--track-bg:theme(colors.neutral.700)]"
+                        onChange={(v)=> handleGainChange(v)}
+
                       />
                     </div>
                     <div className="text-[0.75rem] text-white/40 leading-tight">

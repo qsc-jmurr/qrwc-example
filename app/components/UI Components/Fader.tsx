@@ -66,7 +66,7 @@ export const Fader: React.FC<FaderProps> = ({
             className="absolute inset-0 opacity-0 cursor-pointer"
           />
           <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] text-white/70 font-medium">
-            {formatValue ? formatValue(value) : value.toFixed(2)}
+            {formatValue ? formatValue(value) : null}
           </span>
         </div>
       </div>
